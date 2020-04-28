@@ -6,8 +6,8 @@ cc.Class({
             type: cc.Node,
             default: null,
         },
-        max_r : 120,
-        min_r : 60,
+        max_r : 50,
+        min_r : 30,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -22,12 +22,14 @@ cc.Class({
             console.log('touch');
             var w_pos = e.getLocation();//获取触摸坐标
             var pos = this.node.convertToNodeSpaceAR(w_pos);//坐标转换
-            //设置摇杆区域
+            // 设置摇杆区域
             var len = pos.mag();
             if(len > this.max_r){
                 pos.x = pos.x * this.max_r / len;
                 pos.y = pos.y * this.max_r / len;
             }
+
+            // console.log(pos.x,pos.y);
             this.stick.setPosition(pos);
             // 获取摇杆转变角度,对外提供摇杆方向
             if(len < this.min_r){
@@ -55,19 +57,19 @@ cc.Class({
                 this.dir = 2;
             }
             this.redius = r;
-            console.log(this.dir);
-        }.bind(this),this);
+            // console.log(this.dir);
+        },this);
 
         // 重置,监听触摸事件结束
         this.stick.on(cc.Node.EventType.TOUCH_END,function (e) {
             this.stick.setPosition(cc.v2(0, 0));
             this.dir = -1;
-        }.bind(this),this);
+        },this);
         // 监听触摸取消事件
         this.stick.on(cc.Node.EventType.TOUCH_CANCEL,function (e) {
             this.stick.setPosition(cc.v2(0, 0));
             this.dir = -1;
-        }.bind(this),this);
+        },this);
 
 
 
