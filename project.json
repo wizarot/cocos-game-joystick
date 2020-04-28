@@ -1,0 +1,8 @@
+{
+  "engine": "cocos-creator-js",
+  "packages": "packages",
+  "name": "joystick",
+  "uuid": "e2867865-e9c5-4077-b2cd-1e9a6ec05cd6",
+  "version": "2.3.3-rc.4",
+  "id": "2037bd37-748c-4e5f-b047-6dde1e93da30"
+}
