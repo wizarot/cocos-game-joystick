@@ -60,8 +60,34 @@ cc.Class({
         head.x += sx;
         head.y += sy;
         this.pos_set.push(head.getPosition());
+        // 蛇转向角度
+        var degree = r * 180 / Math.PI;//将弧度转为度
+        degree = 360 - degree;
+        head.rotation = degree;
+        //贪吃蛇每节都要跟着头动
+        for (var i=1;i < this.node.childrenCount;i++){
+            var item = this.node.children[i];
+            var src = item.getPosition();
+            //每节位置调整
+            item.end_cur_index++;
+            item.setPosition(this.pos_set[item.end_cur_index]);
+            //每节蛇神角度调整
+            var dst = item.getPosition();
+            var dir = cc.pSub(dst,src);// TODO:函数弃用
+            r = Math.atan2(dir.y,dir.x);
+            degree = r * 180 / Math.PI;
+            degree = 360 - degree;
+            item.rotation = degree;
+        }
 
     },
 
-    // update (dt) {},
+    update (dt) {
+        // FIXED_TIME机制任何时候都能调用,保证Dt是固定值
+        this.fixed_time += dt;
+        while (this.fixed_time > this.FIXED_TIME){
+            this.fixed_update(this.FIXED_TIME);
+            this.fixed_time -= this.FIXED_TIME;
+        }
+    },
 });
