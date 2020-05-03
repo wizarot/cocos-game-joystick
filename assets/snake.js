@@ -23,23 +23,24 @@ cc.Class({
     start () {
         // this: 当前组件实例
         // this.node: 当前组件实例所在节点
+        // console.log(this.node);
         this.fixed_time = 0;
         this.pos_set = [];// 从蛇尾蠕动到蛇头经过的所有位置
-        var len = this.ITEM_DISTANCE * (this.onDestroy.children.length - 1); // 从蛇尾走道蛇头的距离
+        var len = this.ITEM_DISTANCE * (this.node.children.length - 1); // 从蛇尾走道蛇头的距离
         var total_time = len / this.speed; // 从蛇尾走到蛇头所用时间
         var frame_time = this.FIXED_TIME; // 每帧用fixedupdate模拟???
         var block = this.speed * frame_time;//每次刷新蠕动距离
         var now_len = 0;
         var xpos = len;
         while(now_len < len){
-            this.pos_set.push(cc.p(xpos,0));//把坐标保存到数组cc.p可能弃用了
+            this.pos_set.push(cc.v2(xpos,0));//把坐标保存到数组cc.p和cc.v2相同
             now_len += block;
             xpos -= block;
         }
 
-        this.pos_set.push(cc.p(0,0));//
+        this.pos_set.push(cc.v2(0,0));
         var block_num = 0;
-        for(var i = this.onDestroy.children.length -1;i >= 0; i--){
+        for(var i = this.node.children.length -1;i >= 0; i--){
             var now_index = Math.floor((block_num * this.ITEM_DISTANCE) / block);
             this.node.children[i].end_cur_index = now_index;
             this.node.children[i].setPosition(this.pos_set[now_index]);
@@ -52,6 +53,7 @@ cc.Class({
         }
         // 摇杆放小角度,即弧度?
         var r = this.stick.radius;
+        // console.log(r);
         //距离: 蛇头x时间x速度
         var head = this.node.children[0];
         var s = this.speed * dt;
@@ -63,7 +65,8 @@ cc.Class({
         // 蛇转向角度
         var degree = r * 180 / Math.PI;//将弧度转为度
         degree = 360 - degree;
-        head.rotation = degree;
+        // head.rotation = degree; // 这个似乎已经弃用
+        head.angle = - degree;
         //贪吃蛇每节都要跟着头动
         for (var i=1;i < this.node.childrenCount;i++){
             var item = this.node.children[i];
@@ -73,11 +76,12 @@ cc.Class({
             item.setPosition(this.pos_set[item.end_cur_index]);
             //每节蛇神角度调整
             var dst = item.getPosition();
-            var dir = cc.pSub(dst,src);// TODO:函数弃用
+            var dir = dst.sub(src);
             r = Math.atan2(dir.y,dir.x);
             degree = r * 180 / Math.PI;
             degree = 360 - degree;
-            item.rotation = degree;
+            // item.rotation = degree;
+            item.angle = degree;
         }
 
     },

@@ -7,7 +7,7 @@ cc.Class({
             default: null,
         },
         max_r : 50,
-        min_r : 30,
+        min_r : 10,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -19,7 +19,7 @@ cc.Class({
 
 
         this.stick.on(cc.Node.EventType.TOUCH_MOVE,function (e) {
-            console.log('touch');
+            // console.log('touch');
             var w_pos = e.getLocation();//获取触摸坐标
             var pos = this.node.convertToNodeSpaceAR(w_pos);//坐标转换
             // 设置摇杆区域
@@ -56,8 +56,8 @@ cc.Class({
             }else if (r >= 7 * Math.PI / 8 && r < 8 * Math.PI / 8){
                 this.dir = 2;
             }
-            this.redius = r;
-            // console.log(this.dir);
+            this.radius = r;
+            // console.log(r,this.dir);
         },this);
 
         // 重置,监听触摸事件结束
